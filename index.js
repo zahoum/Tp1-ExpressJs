@@ -39,13 +39,12 @@ app.post('/equipes', async (req, res) => {
     res.json(equipes);
 });
 
-app.put('/equipes/:id', async (req, res) => {
-    const equipes = await readEquipes();
-    const index = equipes.findIndex(e => e.id == req.params.id);
-    if (index === -1) return res.status(404).json({ message: "Equipe not found" });
-    equipes[index] = req.body;
-    await writeEquipes(equipes);
-    res.json(equipes);
+app.put('/equipes/:id',(req, res)=>{
+    const id = parseInt(req.params.id);
+    let equipe = equipes.find(equipe => equipe.id === id)
+    equipe.name = req.body.name;
+    equipe.cuntry = req.body.cuntry;
+    res.status(202).json(equipe);
 });
 
 app.delete('/equipes/:id', async (req, res) => {
