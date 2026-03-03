@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
 const PORT = 8000;
-const IP = '10.99.164.210';
+const IP = '192.168.0.173';
 const EQUIPES_FILE = join(__dirname, 'eqp.json');
 
 app.use(express.json());
@@ -39,11 +39,15 @@ app.post('/equipes', async (req, res) => {
     res.json(equipes);
 });
 
-app.put('/equipes/:id',(req, res)=>{
+app.put('/equipes/:id', async (req, res)=>{
+    const equipes = await readEquipes();      // Read file
     const id = parseInt(req.params.id);
     let equipe = equipes.find(equipe => equipe.id === id)
     equipe.name = req.body.name;
     equipe.cuntry = req.body.cuntry;
+    
+    await writeEquipes(equipes);              //  Save to file!
+    
     res.status(202).json(equipe);
 });
 
